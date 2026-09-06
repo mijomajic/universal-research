@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universal-research.local/schemas/research-brief.json",
+  "title": "ResearchBrief",
+  "description": "Normalized research request and plan. Optional interchange; not required for every task.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["topic", "research_questions", "depth"],
+  "properties": {
+    "topic": { "type": "string", "minLength": 1 },
+    "goal": { "type": "string" },
+    "research_questions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "subquestions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "domain_modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Lens id matching references/modes/<id>.md"
+      }
+    },
+    "depth": {
+      "type": "string",
+      "enum": ["quick-scan", "standard", "deep-dive", "exhaustive"]
+    },
+    "breadth": {
+      "type": "string",
+      "enum": ["narrow", "focused", "broad", "panoramic"]
+    },
+    "time_scope": { "type": ["string", "null"] },
+    "geography": { "type": ["string", "null"] },
+    "source_preferences": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source_exclusions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source_classes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "time": { "type": "string" },
+        "cost": { "type": "string" },
+        "access": { "type": "string" },
+        "recency": { "type": "string" }
+      }
+    },
+    "stopping_conditions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "visual_evidence_needed": { "type": "boolean" },
+    "primary_sources_required": { "type": "boolean" },
+    "output_request": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "shape": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

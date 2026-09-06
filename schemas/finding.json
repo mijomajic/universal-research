@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universal-research.local/schemas/finding.json",
+  "title": "Finding",
+  "description": "One synthesized claim with support and counterevidence.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["claim"],
+  "properties": {
+    "id": { "type": "string" },
+    "claim": { "type": "string", "minLength": 1 },
+    "theme": { "type": "string" },
+    "subquestion": { "type": "string" },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "source.json" },
+          {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "source_id": { "type": "string" },
+              "url": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        ]
+      }
+    },
+    "counterevidence": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "source.json" },
+          { "type": "object", "additionalProperties": true }
+        ]
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low", "unknown"]
+    },
+    "uncertainty": { "type": "string" },
+    "scope": { "type": "string" },
+    "kind": {
+      "type": "string",
+      "enum": ["observation", "pattern", "speculation", "recommendation"]
+    },
+    "notes": { "type": "string" }
+  }
+}

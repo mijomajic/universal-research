@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universal-research.local/schemas/report.json",
+  "title": "ResearchReport",
+  "description": "Domain-general research result. Shape still follows the user; this is interchange.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["objective", "key_findings"],
+  "properties": {
+    "objective": { "type": "string", "minLength": 1 },
+    "deliverable": { "type": "string" },
+    "scope": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "time": { "type": "string" },
+        "geography": { "type": "string" },
+        "depth": { "type": "string" },
+        "breadth": { "type": "string" },
+        "modes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "source_classes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "iterations": { "type": "integer", "minimum": 0 },
+        "tools": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "limitations": { "type": "string" }
+      }
+    },
+    "key_findings": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "finding.json" }
+        ]
+      }
+    },
+    "patterns": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "source.json" }
+        ]
+      }
+    }
+  }
+}

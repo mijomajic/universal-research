@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universal-research.local/schemas/source.json",
+  "title": "Source",
+  "description": "One evidence item after normalization.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["title"],
+  "properties": {
+    "id": { "type": "string" },
+    "source_type": {
+      "type": "string",
+      "description": "Class: paper, docs, official, web, code, reddit, x, pinterest, government, review, other"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "url": { "type": ["string", "null"] },
+    "canonical_url": { "type": ["string", "null"] },
+    "author_or_entity": { "type": ["string", "null"] },
+    "published_at": { "type": ["string", "null"] },
+    "retrieved_at": { "type": ["string", "null"] },
+    "primary_or_secondary": {
+      "type": ["string", "null"],
+      "enum": ["primary", "secondary", "unknown", null]
+    },
+    "summary": { "type": "string" },
+    "relevance": {
+      "type": ["string", "number", "null"]
+    },
+    "quality": {
+      "type": ["string", "object", "null"]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "local_path": { "type": ["string", "null"] },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "retrieved_via": { "type": "string" },
+        "parent_url": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

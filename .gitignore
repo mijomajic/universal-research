@@ -1,0 +1,8 @@
+.DS_Store
+.research/
+.firecrawl/
+__pycache__/
+*.pyc
+.env
+.capability-cache.json
+*.swp

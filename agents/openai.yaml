@@ -1,0 +1,5 @@
+display_name: Universal Research
+short_description: Domain-general evidence research orchestrator
+default_prompt: Research this with the universal-research skill.
+policy:
+  allow_implicit_invocation: true

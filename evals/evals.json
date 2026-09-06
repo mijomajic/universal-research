@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "skill": "universal-research",
+  "notes": "Structural checks run via scripts/run_evals.py. Trigger/behavior fields are the spec for agent or human scoring; they are not regex tests of model prose.",
+  "cases": [
+    {
+      "id": "pos-creatine-cognition",
+      "file": "test-cases/pos-creatine-cognition.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["science", "academic"],
+      "avoid": ["reddit-as-proof", "forced-market-framework"]
+    },
+    {
+      "id": "pos-calorie-apps",
+      "file": "test-cases/pos-calorie-apps.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["market"],
+      "avoid": ["science-workflow", "forced-icp"]
+    },
+    {
+      "id": "pos-remote-work",
+      "file": "test-cases/pos-remote-work.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["academic", "science"]
+    },
+    {
+      "id": "pos-agent-memory",
+      "file": "test-cases/pos-agent-memory.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["technical"]
+    },
+    {
+      "id": "pos-recipe-ebooks",
+      "file": "test-cases/pos-recipe-ebooks.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["visual"]
+    },
+    {
+      "id": "pos-ai-clipping",
+      "file": "test-cases/pos-ai-clipping.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["competitive"]
+    },
+    {
+      "id": "pos-3d-printing-queries",
+      "file": "test-cases/pos-3d-printing-queries.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["keyword"]
+    },
+    {
+      "id": "pos-content-hooks",
+      "file": "test-cases/pos-content-hooks.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["content"]
+    },
+    {
+      "id": "pos-fusion",
+      "file": "test-cases/pos-fusion.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["general"]
+    },
+    {
+      "id": "pos-fully-specified-science",
+      "file": "test-cases/pos-fully-specified-science.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["science", "academic"],
+      "notes": "Do not ask extra questions; proceed."
+    },
+    {
+      "id": "pos-fully-specified-market",
+      "file": "test-cases/pos-fully-specified-market.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["market"]
+    },
+    {
+      "id": "amb-research-this",
+      "file": "test-cases/amb-research-this.md",
+      "trigger": true,
+      "clarify": true,
+      "notes": "Topic missing enough that geography/purpose would change the plan — one short question max."
+    },
+    {
+      "id": "neg-math",
+      "file": "test-cases/neg-math.md",
+      "trigger": false
+    },
+    {
+      "id": "neg-rewrite",
+      "file": "test-cases/neg-rewrite.md",
+      "trigger": false
+    },
+    {
+      "id": "neg-tweet",
+      "file": "test-cases/neg-tweet.md",
+      "trigger": false
+    },
+    {
+      "id": "neg-recursion",
+      "file": "test-cases/neg-recursion.md",
+      "trigger": false
+    }
+  ]
+}
