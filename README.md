@@ -33,14 +33,14 @@ From a checkout:
 ./install.sh --yes --with-agent-reach   # only if you want Agent Reach installed
 ```
 
-Installs into `$CODEX_HOME/skills/universal-research` (default `~/.codex/skills/universal-research`), persists the Firecrawl endpoint in `~/.zshrc` and `~/.zshenv`, reuses an existing Firecrawl CLI, installs official Firecrawl Codex skills with `firecrawl setup core --agent codex -g -y` (no `--browser`), and probes the LAN server.
+Installs the skill into `~/.agents/skills/universal-research` and **symlinks it into every detected agent** (Cursor, Codex, Claude, Gemini, OpenClaw, Windsurf, Continue, Trae, Kiro, …). Also persists the Firecrawl endpoint in `~/.zshrc` and `~/.zshenv`, reuses an existing Firecrawl CLI, installs official Firecrawl skills with `firecrawl setup core -g -y` (no `--browser`), and probes the LAN server.
 
 It will **not** create a Firecrawl Cloud account, consume Cloud credits, overwrite `~/.agent-reach/`, or copy cookies.
 
 ## Doctor
 
 ```bash
-~/.codex/skills/universal-research/scripts/doctor.sh --probe
+~/.agents/skills/universal-research/scripts/doctor.sh --probe
 ```
 
 Reports Codex, skill install, repo access, Firecrawl CLI/endpoint/server/scrape, official Firecrawl skills, Agent Reach routes, and derived kit status. Expensive probes are cached ~24h.
@@ -61,7 +61,7 @@ Official Firecrawl CLI skills teach commands. This skill decides whether, why, a
 ## Uninstall
 
 ```bash
-~/.codex/skills/universal-research/uninstall.sh
+~/.agents/skills/universal-research/uninstall.sh
 ```
 
 Leaves Firecrawl CLI, the LAN endpoint export, Agent Reach, and browser sessions alone. `--purge-firecrawl-env` is opt-in.

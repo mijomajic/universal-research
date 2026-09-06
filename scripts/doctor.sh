@@ -78,6 +78,16 @@ else
   fail "universal-research installed"
 fi
 
+echo "Agents"
+ur_list_skill_homes | while IFS= read -r home; do
+  dest="$home/universal-research/SKILL.md"
+  if [[ -f "$dest" ]]; then
+    ok "$home"
+  else
+    miss "$home"
+  fi
+done
+
 if ur_have gh; then
   if gh api "repos/$UR_REPO_SLUG" --jq .full_name >/dev/null 2>&1; then
     ok "private repo/update access ($UR_REPO_SLUG)"

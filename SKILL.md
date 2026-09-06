@@ -20,6 +20,8 @@ metadata:
 
 A research **orchestrator**, not a template. Infer what kind of research the request needs, load only the relevant lenses, gather evidence, and return whatever artifact the user asked for.
 
+When this skill is loaded for a research request: **run the work**. Collect evidence with the available CLIs. Do not stop after restating this pipeline, and do not wait for a multi-agent runtime. You are the orchestrator; subagents are optional.
+
 Do not impose ICP, VOC, literature-review structure, SERP analysis, competitor matrices, or visual taxonomies unless they serve this request.
 
 ## When this applies

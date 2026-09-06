@@ -21,6 +21,9 @@ Usage: install.sh [options]
   --skip-probe
   --from-tree DIR        Install from an already unpacked checkout
 
+Canonical skill: ~/.agents/skills/universal-research
+Symlinked into every detected agent skills dir (Cursor, Codex, Claude, Gemini, …).
+
 Environment:
   CODEX_HOME             Default: ~/.codex
   UR_REPO                Default: $UR_REPO_SLUG
@@ -54,10 +57,11 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
 fi
 
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-SKILL_DST="$CODEX_HOME/skills/universal-research"
 mkdir -p "$CODEX_HOME/skills"
-
-echo "==> Codex home: $CODEX_HOME"
+mkdir -p "$HOME/.agents/skills"
+if [[ -d "$HOME/.opencode" && ! -d "$HOME/.opencode/skills" ]]; then
+  mkdir -p "$HOME/.opencode/skills"
+fi
 
 find_local_root() {
   local src="${BASH_SOURCE[0]:-}"
@@ -103,6 +107,7 @@ fi
 # shellcheck source=scripts/lib.sh
 . "$TREE/scripts/lib.sh"
 ENDPOINT="$(ur_normalize_firecrawl_url)"
+SKILL_DST="$(ur_canon_skill)"
 
 echo "==> installing skill → $SKILL_DST"
 mkdir -p "$SKILL_DST"
@@ -121,6 +126,17 @@ else
   rm -rf "$SKILL_DST/.git"
 fi
 chmod +x "$SKILL_DST/install.sh" "$SKILL_DST/uninstall.sh" "$SKILL_DST/scripts/"*.sh "$SKILL_DST/scripts/"*.py 2>/dev/null || true
+
+echo "==> linking into agent skill directories"
+ur_list_skill_homes | while IFS= read -r home; do
+  linked="$(ur_link_skill_into_home "$SKILL_DST" "$home" || true)"
+  if [[ -n "${linked:-}" ]]; then
+    echo "  $linked"
+  fi
+done
+# Codex always gets a link even if CODEX_HOME was empty before
+mkdir -p "$CODEX_HOME/skills"
+ur_link_skill_into_home "$SKILL_DST" "$CODEX_HOME/skills" >/dev/null || true
 
 echo "==> persisting FIRECRAWL_API_URL=$ENDPOINT"
 ur_persist_firecrawl_url "$HOME/.zshrc" "$ENDPOINT"
@@ -147,7 +163,7 @@ fi
 if [[ "$SKIP_FC_SKILLS" -eq 0 ]]; then
   echo "==> official Firecrawl Codex skills (no browser login)"
   if firecrawl setup core --help >/dev/null 2>&1; then
-    if ! firecrawl setup core --agent codex -g -y; then
+    if ! firecrawl setup core -g -y; then
       echo "warning: firecrawl setup core failed; doctor will flag missing skills" >&2
     fi
   else

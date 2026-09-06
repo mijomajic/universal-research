@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Remove the Codex skill copy. Does not touch Firecrawl CLI, Agent Reach
-# credentials, browser sessions, or FIRECRAWL_API_URL (shared household infra).
+# Remove the global skill copy and agent symlinks. Does not touch Firecrawl CLI,
+# Agent Reach credentials, browser sessions, or FIRECRAWL_API_URL.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -8,17 +8,8 @@ if [[ -f "$ROOT/scripts/lib.sh" ]]; then
   # shellcheck source=scripts/lib.sh
   . "$ROOT/scripts/lib.sh"
 else
-  UR_FIRECRAWL_API_URL_CANON="http://192.168.1.80:3002"
-  ur_codex_home() {
-    if [[ -n "${CODEX_HOME:-}" ]]; then
-      printf '%s\n' "$CODEX_HOME"
-    else
-      printf '%s\n' "$HOME/.codex"
-    fi
-  }
-  ur_skill_dst() {
-    printf '%s\n' "$(ur_codex_home)/skills/universal-research"
-  }
+  ur_canon_skill() { printf '%s\n' "$HOME/.agents/skills/universal-research"; }
+  ur_list_skill_homes() { printf '%s\n' "$HOME/.codex/skills"; }
 fi
 
 PURGE_ENV=0
@@ -27,7 +18,7 @@ while [[ $# -gt 0 ]]; do
     --purge-firecrawl-env) PURGE_ENV=1 ;;
     -h|--help)
       echo "Usage: uninstall.sh [--purge-firecrawl-env]"
-      echo "Default: delete ~/.codex/skills/universal-research only."
+      echo "Removes ~/.agents/skills/universal-research and agent symlinks."
       echo "--purge-firecrawl-env also strips FIRECRAWL_API_URL from ~/.zshrc and ~/.zshenv."
       echo "Never deletes ~/.agent-reach, cookies, or firecrawl-cli credentials."
       exit 0
@@ -37,12 +28,22 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-DST="$(ur_skill_dst)"
-if [[ -e "$DST" ]]; then
-  rm -rf "$DST"
-  echo "removed $DST"
+CANON="$(ur_canon_skill)"
+ur_list_skill_homes | while IFS= read -r home; do
+  dest="$home/universal-research"
+  [[ -e "$dest" || -L "$dest" ]] || continue
+  if [[ "$home" == "$(dirname "$CANON")" ]]; then
+    continue
+  fi
+  rm -rf "$dest"
+  echo "removed $dest"
+done
+
+if [[ -e "$CANON" ]]; then
+  rm -rf "$CANON"
+  echo "removed $CANON"
 else
-  echo "not installed at $DST"
+  echo "not installed at $CANON"
 fi
 
 if [[ "$PURGE_ENV" -eq 1 ]]; then

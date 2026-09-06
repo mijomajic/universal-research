@@ -15,8 +15,51 @@ ur_codex_home() {
   fi
 }
 
+ur_canon_skill() {
+  printf '%s\n' "$HOME/.agents/skills/universal-research"
+}
+
 ur_skill_dst() {
-  printf '%s\n' "$(ur_codex_home)/skills/universal-research"
+  printf '%s\n' "$(ur_canon_skill)"
+}
+
+# Existing agent skill directories on this Mac (absolute paths).
+ur_list_skill_homes() {
+  local d
+  for d in \
+    "$HOME/.agents/skills" \
+    "$HOME/.codex/skills" \
+    "$HOME/.cursor/skills" \
+    "$HOME/.claude/skills" \
+    "$HOME/.gemini/skills" \
+    "$HOME/.openclaw/skills" \
+    "$HOME/.opencode/skills" \
+    "$HOME/.kiro/skills" \
+    "$HOME/.trae/skills" \
+    "$HOME/.continue/skills" \
+    "$HOME/.codeium/windsurf/skills" \
+    "$HOME/.codex-muse/skills" \
+    "$HOME/.amp/skills"
+  do
+    if [[ -d "$d" ]]; then
+      printf '%s\n' "$d"
+    fi
+  done
+}
+
+ur_link_skill_into_home() {
+  local canon="$1"
+  local home="$2"
+  local dest="$home/universal-research"
+  if [[ "$home" == "$(dirname "$canon")" ]]; then
+    return 0
+  fi
+  mkdir -p "$home"
+  if [[ -e "$dest" || -L "$dest" ]]; then
+    rm -rf "$dest"
+  fi
+  ln -sfn "$canon" "$dest"
+  printf '%s\n' "$dest"
 }
 
 ur_normalize_firecrawl_url() {
