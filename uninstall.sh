@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Remove the global skill copy and agent symlinks. Does not touch Firecrawl CLI,
-# Agent Reach credentials, browser sessions, or FIRECRAWL_API_URL.
+# Agent Reach credentials, PyTok, ~/.pytok, browser sessions, or FIRECRAWL_API_URL.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
       echo "Usage: uninstall.sh [--purge-firecrawl-env]"
       echo "Removes ~/.agents/skills/universal-research and agent symlinks."
       echo "--purge-firecrawl-env also strips FIRECRAWL_API_URL from ~/.zshrc and ~/.zshenv."
-      echo "Never deletes ~/.agent-reach, cookies, or firecrawl-cli credentials."
+      echo "Never deletes ~/.agent-reach, ~/.pytok, cookies, or firecrawl-cli credentials."
       exit 0
       ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
@@ -58,4 +58,4 @@ if [[ "$PURGE_ENV" -eq 1 ]]; then
   done
 fi
 
-echo "Agent Reach config and browser sessions were not modified."
+echo "Agent Reach config, PyTok, and browser sessions were not modified."

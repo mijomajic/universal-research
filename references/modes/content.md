@@ -18,7 +18,7 @@ Formats, topics, hooks, narratives, recurring themes, engagement patterns, creat
 
 ## Sources
 
-Platform search via Agent Reach when the platform is in-kit (X, Reddit, YouTube, etc.). Browser for networks without a native route. Firecrawl for public articles and show notes. Do not conclude from one viral hit.
+Platform search via Agent Reach when the platform is in-kit (X, Reddit, YouTube, etc.). TikTok via [../integrations/tiktok.md](../integrations/tiktok.md) when the object of study is short-form native (and doctor shows PyTok healthy). Browser for networks without a native route. Firecrawl for public articles and show notes. Do not conclude from one viral hit.
 
 ## Pitfalls
 

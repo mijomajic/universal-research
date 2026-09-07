@@ -35,7 +35,9 @@ From a checkout:
 
 Installs the skill into `~/.agents/skills/universal-research` and **symlinks it into every detected agent** (Cursor, Codex, Claude, Gemini, OpenClaw, Windsurf, Continue, Trae, Kiro, …). Also persists the Firecrawl endpoint in `~/.zshrc` and `~/.zshenv`, reuses an existing Firecrawl CLI, installs official Firecrawl skills with `firecrawl setup core -g -y` (no `--browser`), and probes the LAN server.
 
-It will **not** create a Firecrawl Cloud account, consume Cloud credits, overwrite `~/.agent-reach/`, or copy cookies.
+It will **not** create a Firecrawl Cloud account, consume Cloud credits, overwrite `~/.agent-reach/` or `~/.pytok/`, or copy cookies.
+
+PyTok is installed automatically when missing (GitHub `MEOMcGill/pytok`, not PyPI). If that install fails, Universal Research still finishes; doctor marks TikTok unavailable. TikTok is optional.
 
 ## Doctor
 
@@ -43,16 +45,26 @@ It will **not** create a Firecrawl Cloud account, consume Cloud credits, overwri
 ~/.agents/skills/universal-research/scripts/doctor.sh --probe
 ```
 
-Reports Codex, skill install, repo access, Firecrawl CLI/endpoint/server/scrape, official Firecrawl skills, Agent Reach routes, and derived kit status. Expensive probes are cached ~24h.
+Reports Codex, skill install, repo access, Firecrawl CLI/endpoint/server/scrape, official Firecrawl skills, Agent Reach routes, TikTok/PyTok capability, and derived kit status. Expensive probes are cached ~24h. TikTok doctor lines are static/local (installed APIs, venv, browser binary, `~/.pytok` session presence) — they do not scrape TikTok just to fill the report.
 
-If Firecrawl is offline the skill still installs; doctor says so; research continues on remaining sources. There is no Cloud fallback.
+If Firecrawl is offline the skill still installs; doctor says so; research continues on remaining sources. There is no Cloud fallback. If PyTok is missing or red, the rest of the kit still runs.
+
+### TikTok login (optional, this Mac only)
+
+Anonymous TikTok collection is often empty. If doctor shows PyTok installed but no session, and the task actually needs native TikTok:
+
+```bash
+~/.agents/skills/universal-research/scripts/setup-tiktok.sh
+```
+
+A browser window opens; you log in on tiktok.com yourself. Session files stay in `~/.pytok` (or `$PYTOK_HOME`). They are never committed, never synced through Git, and never printed. Do not paste TikTok passwords into agent prompts. Skip this if anonymous access is enough for the capability you need.
 
 ## What the agent should do
 
 `SKILL.md` is the controller. References load on demand:
 
 - `references/modes/` — lenses (science, market, visual, …). Add `legal.md` later without rewriting the core.
-- `references/integrations/` — Firecrawl, Agent Reach, Reddit, X, Pinterest, vision.
+- `references/integrations/` — Firecrawl, Agent Reach, Reddit, X, Pinterest, TikTok/PyTok, vision.
 - `schemas/` — optional JSON for briefs/sources/findings/reports.
 - `scripts/merge_sources.py` — URL canonicalization and corpus merge.
 
@@ -64,7 +76,7 @@ Official Firecrawl CLI skills teach commands. This skill decides whether, why, a
 ~/.agents/skills/universal-research/uninstall.sh
 ```
 
-Leaves Firecrawl CLI, the LAN endpoint export, Agent Reach, and browser sessions alone. `--purge-firecrawl-env` is opt-in.
+Leaves Firecrawl CLI, the LAN endpoint export, Agent Reach, PyTok, `~/.pytok`, and browser sessions alone. `--purge-firecrawl-env` is opt-in.
 
 ## Collaborator
 
@@ -72,7 +84,7 @@ Grant the roommate GitHub account read access on this private repo (`gh repo add
 
 ## Safety
 
-Do not commit `~/.agent-reach/config.yaml`, browser profiles, tokens, or `.env` secrets. The LAN Firecrawl URL is not a credential and may live in the repo.
+Do not commit `~/.agent-reach/config.yaml`, `~/.pytok/`, browser profiles, tokens, cookies, or `.env` secrets. The LAN Firecrawl URL is not a credential and may live in the repo.
 
 ## Evals
 

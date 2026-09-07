@@ -1,6 +1,6 @@
 # Source routing
 
-Choose sources from the **evidence the question needs**, not from a default stack. Never invoke Reddit, X, Pinterest, Firecrawl, or Agent Reach because they exist.
+Choose sources from the **evidence the question needs**, not from a default stack. Never invoke Reddit, X, Pinterest, TikTok, Firecrawl, or Agent Reach because they exist.
 
 ## Source classes
 
@@ -19,6 +19,7 @@ Choose sources from the **evidence the question needs**, not from a default stac
 | Forums / Reddit | Lived experience, language, workarounds | Selection and brigading |
 | X | Announcements, live discourse | Virality and bots |
 | Pinterest / image boards | Visual conventions | Reposts, no provenance |
+| TikTok / short-form | Hooks, creators, sounds, hashtags, in-app trends, comment language | Virality bias; not scientific proof |
 | Product pages / reviews | Features, complaints, pricing signals | Fake reviews; survivorship |
 | SERPs | Demand, intent, competitive coverage | Personalized/geo SERPs |
 
@@ -27,7 +28,7 @@ Choose sources from the **evidence the question needs**, not from a default stac
 1. **Match class to claim type.** Causal/scientific → primary or review literature. Language/pain → communities. Behavior of software → docs and code. Aesthetics → images.
 2. **Primary vs secondary.** Prefer primary when facts, APIs, or study results are at stake. Secondary is fine for orientation and for locating primaries.
 3. **Freshness.** Check dates on anything that can move: prices, APIs, rankings, social mood, market shares.
-4. **Authority is domain-local.** A Nature paper is not an authority on TikTok creative trends. A popular founder is not an authority on RCT methods.
+4. **Authority is domain-local.** A Nature paper is not an authority on TikTok creative trends. A popular founder is not an authority on RCT methods. TikTok engagement is not an authority on prevalence.
 5. **Independence.** Two blog posts summarizing the same press release are one source. Count independent origins, not URLs.
 6. **Bias and incentives.** Note who pays, who ranks, who is selling.
 7. **Triangulation.** For non-trivial claims, seek at least two independent classes or two independent primaries.
@@ -43,6 +44,7 @@ Choose sources from the **evidence the question needs**, not from a default stac
 | Many URLs on one domain | `map` if doctor shows it works; else docs index / crawl with a tight limit | Unbounded crawl |
 | Section-scale corpus | Firecrawl `crawl` with `--limit` / path filters | Cloud Firecrawl |
 | Platform-native search (X, Reddit, …) | Agent Reach after `doctor --json` | Anonymous scrape of login walls |
+| Platform-native short-form (TikTok) | TikTok integration / PyTok if doctor is green | Using TikTok as scientific proof or a mandatory step |
 | Login-gated visual discovery | Authenticated browser (Pinterest default) | Assuming Agent Reach has Pinterest |
 | Image meaning | Vision model on saved files | Guessing from filenames |
 | Official GitHub | `gh` | Scraping the HTML UI |
@@ -54,7 +56,18 @@ If a capability is down, fall back to the next **local** layer and say so. Never
 
 ```text
 simple discovery → direct page → Firecrawl scrape → map/crawl
-    → Agent Reach native route → authenticated browser → vision
+    → Agent Reach native route → TikTok/PyTok if the question needs it
+    → authenticated browser → vision
 ```
 
 Skip to the layer that matches the evidence need.
+
+## TikTok routing examples
+
+| Request | TikTok? |
+| --- | --- |
+| Research TikTok hooks used by AI productivity creators | **Yes** — the object of study is TikTok-native |
+| Research whether creatine improves cognition | **No**, unless the user explicitly wants TikTok discourse as a labeled extra |
+| Research visual/content trends in meal-prep products for young women | **Maybe** — combine with Pinterest, Reddit, X, Firecrawl, and vision; TikTok is one source, not the workflow |
+
+TikTok is a source option. Load [integrations/tiktok.md](integrations/tiktok.md) only when you will actually collect there.

@@ -62,6 +62,31 @@
       "modes": ["content"]
     },
     {
+      "id": "pos-tiktok-meal-prep",
+      "file": "test-cases/pos-tiktok-meal-prep.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["content", "visual"],
+      "sources": ["tiktok"],
+      "notes": "PyTok if healthy; engagement interpreted cautiously; analyze video/visuals not only captions."
+    },
+    {
+      "id": "pos-creatine-no-tiktok",
+      "file": "test-cases/pos-creatine-no-tiktok.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["science", "academic"],
+      "avoid": ["tiktok-default", "reddit-as-proof"]
+    },
+    {
+      "id": "deg-tiktok-unavailable",
+      "file": "test-cases/deg-tiktok-unavailable.md",
+      "trigger": true,
+      "clarify": false,
+      "modes": ["content"],
+      "notes": "PyTok down: skill continues; TikTok marked unavailable; use fallback sources."
+    },
+    {
       "id": "pos-fusion",
       "file": "test-cases/pos-fusion.md",
       "trigger": true,

@@ -11,3 +11,4 @@ Research creatine and cognition.
 - Modes: science + academic
 - Prioritize reviews/human studies; preserve uncertainty
 - Social sources are not scientific proof
+- TikTok is not a default source for this question

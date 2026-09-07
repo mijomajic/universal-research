@@ -36,6 +36,7 @@ REQUIRED_FILES = [
     "references/integrations/reddit.md",
     "references/integrations/x.md",
     "references/integrations/pinterest.md",
+    "references/integrations/tiktok.md",
     "references/integrations/vision-models.md",
     "schemas/research-brief.json",
     "schemas/source.json",
@@ -45,6 +46,8 @@ REQUIRED_FILES = [
     "scripts/lib.sh",
     "scripts/merge_sources.py",
     "scripts/parse_agent_reach_doctor.py",
+    "scripts/probe_tiktok.py",
+    "scripts/setup-tiktok.sh",
     "evals/evals.json",
 ]
 
@@ -122,6 +125,7 @@ def main() -> int:
         for needle in (
             "references/modes/",
             "references/integrations/firecrawl.md",
+            "references/integrations/tiktok.md",
             "references/docs-index.md",
             "ordinary Q&A",
         ):
@@ -166,6 +170,22 @@ def main() -> int:
 
     if "api.firecrawl.dev" in (ROOT / "SKILL.md").read_text(encoding="utf-8"):
         errors.append("SKILL.md must not send agents to Firecrawl Cloud")
+
+    install_text = (ROOT / "install.sh").read_text(encoding="utf-8") + "\n" + (ROOT / "scripts" / "lib.sh").read_text(encoding="utf-8")
+    if "MEOMcGill/pytok" not in install_text:
+        errors.append("install.sh should install PyTok from GitHub MEOMcGill/pytok")
+    if re.search(r'pip(?:3)?\s+install\s+["\']?pytok["\']?\s*$', install_text, re.M):
+        errors.append("install.sh must not pip install the unrelated PyPI pytok package")
+
+    skill_body = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+    if "api.hashtag(" in skill_body or "PyTok.from_pool" in skill_body:
+        errors.append("SKILL.md must not duplicate the PyTok API; keep it in the TikTok integration")
+
+    setup = (ROOT / "scripts" / "setup-tiktok.sh").read_text(encoding="utf-8")
+    if "--password" in setup:
+        errors.append("setup-tiktok.sh must not take a password flag")
+    if "--manual-login" not in setup:
+        errors.append("setup-tiktok.sh should use PyTok --manual-login")
 
     if errors:
         print("validate: FAIL")

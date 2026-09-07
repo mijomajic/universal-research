@@ -6,3 +6,10 @@ __pycache__/
 .env
 .capability-cache.json
 *.swp
+
+# TikTok / PyTok local auth — never commit
+.pytok/
+accounts.db
+*.cookies
+chromedriver*
+user-data-dir/

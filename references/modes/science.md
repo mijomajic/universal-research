@@ -19,7 +19,7 @@ Hypotheses, study design, randomized vs observational evidence, controls, confou
 
 ## Sources
 
-Primary papers, Cochrane/PRISMA-like reviews, clinical guidelines, trial registries, specialist societies. Use Firecrawl to pull full pages you can actually open. Do **not** use Reddit, X, or blogs as scientific proof. They can help you find papers or patient-relevant outcome language.
+Primary papers, Cochrane/PRISMA-like reviews, clinical guidelines, trial registries, specialist societies. Use Firecrawl to pull full pages you can actually open. Do **not** use Reddit, X, TikTok, or blogs as scientific proof. They can help you find papers or patient-relevant outcome language.
 
 If a paper index (Firecrawl `research` or similar) is **hosted-only**, do not call it against the household API. Find papers another way and scrape what the local kit can reach.
 

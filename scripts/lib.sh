@@ -6,6 +6,9 @@ UR_FIRECRAWL_SERVER_VERSION="v2.11.0"
 UR_REPO_SLUG="${UR_REPO:-mijomajic/universal-research}"
 UR_CACHE_DIR="${UR_CACHE_DIR:-$HOME/.universal-research}"
 UR_DOCTOR_CACHE="${UR_CACHE_DIR}/doctor-cache.json"
+UR_PYTOK_GIT="${UR_PYTOK_GIT:-https://github.com/MEOMcGill/pytok.git}"
+UR_PYTOK_GIT_REF="${UR_PYTOK_GIT_REF:-master}"
+UR_PYTOK_VENV="${UR_PYTOK_VENV:-$UR_CACHE_DIR/pytok-venv}"
 
 ur_codex_home() {
   if [[ -n "${CODEX_HOME:-}" ]]; then
@@ -115,4 +118,54 @@ ur_mark() {
 
 ur_have() {
   command -v "$1" >/dev/null 2>&1
+}
+
+ur_pytok_home() {
+  printf '%s\n' "${PYTOK_HOME:-$HOME/.pytok}"
+}
+
+ur_pytok_venv() {
+  printf '%s\n' "${UR_PYTOK_VENV:-$UR_CACHE_DIR/pytok-venv}"
+}
+
+ur_python_is_310() {
+  local py="$1"
+  "$py" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' >/dev/null 2>&1
+}
+
+ur_pick_cpython() {
+  local c
+  for c in ${UR_PYTOK_PYTHON:-} python3.12 python3.11 python3 python3.14; do
+    [[ -n "$c" ]] || continue
+    if ur_have "$c" && ur_python_is_310 "$c"; then
+      command -v "$c"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# Interpreter used to import PyTok (household venv if present).
+ur_pytok_python() {
+  local venv py
+  venv="$(ur_pytok_venv)"
+  if [[ -x "$venv/bin/python" ]]; then
+    printf '%s\n' "$venv/bin/python"
+    return 0
+  fi
+  if [[ -n "${UR_PYTOK_PYTHON:-}" && -x "${UR_PYTOK_PYTHON}" ]]; then
+    printf '%s\n' "$UR_PYTOK_PYTHON"
+    return 0
+  fi
+  if py="$(ur_pick_cpython)"; then
+    printf '%s\n' "$py"
+    return 0
+  fi
+  command -v python3
+}
+
+ur_pytok_import_ok() {
+  local py
+  py="$(ur_pytok_python)"
+  "$py" -c "from pytok.tiktok import PyTok; from pytok.accounts import AccountsPool" >/dev/null 2>&1
 }

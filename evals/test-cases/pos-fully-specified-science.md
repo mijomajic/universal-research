@@ -11,3 +11,4 @@ Prioritize human studies and systematic reviews.
 - Clarify: **no** — subject, depth, population, evidence class, and purpose are present
 - Modes: science + academic
 - Evidence hierarchy; uncertainty preserved; social ≠ proof
+- TikTok is not a default source

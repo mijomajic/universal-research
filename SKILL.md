@@ -45,25 +45,39 @@ This environment can be much stronger than generic web search. Reason in capabil
 ```text
 planning + orchestration
         │
-   ┌────┼──────────────┐
-   ▼    ▼              ▼
-Agent  Firecrawl    authenticated
-Reach  CLI          browser/session
-   │    │              │
-   └────┴──────┬───────┘
+   ┌────┼──────────────┬────────────┐
+   ▼    ▼              ▼            ▼
+Agent  Firecrawl    authenticated  TikTok/PyTok
+Reach  CLI          browser        (optional)
+   │    │              │            │
+   └────┴──────┬───────┴────────────┘
                ▼
      corpus → vision/analysis → synthesis → requested artifact
 ```
 
-Before assuming a channel works, prefer `scripts/doctor.sh` (or its last report). If Agent Reach is missing, continue with a **degraded** kit: Firecrawl + ordinary public web. Never silently switch Firecrawl to Cloud.
+TikTok is an **optional adapter**. Select it only when the question needs short-form, platform-native evidence. Do not make it a default step.
+
+```text
+TikTok / PyTok
+→ short-form platform-native research
+→ creator/content discovery
+→ engagement/content pattern research
+→ comments/audience language where available
+→ video/visual corpus acquisition
+```
+
+Keep access, extraction, and understanding separate: PyTok (or a later replacement) acquires; local corpus holds URLs/metadata/media; vision + text analyze; this skill synthesizes.
+
+Before assuming a channel works, prefer `scripts/doctor.sh` (or its last report). If Agent Reach or PyTok is missing, continue with a **degraded** kit: Firecrawl + ordinary public web. Never silently switch Firecrawl to Cloud.
 
 | Layer | Role | Skip when |
 | --- | --- | --- |
 | Direct retrieval / `gh` / docs | Cheap primary sources | You already have the page |
 | Firecrawl CLI | JS pages, map/crawl, clean markdown, corpora | A short fetch already answers it |
 | Agent Reach | Native X/Reddit/etc. after `doctor --json` | Channel is down or irrelevant |
+| TikTok / PyTok | Short-form native discovery/acquisition | Irrelevant, doctor-red, or treating it as scientific proof |
 | Authenticated browser | Login-gated surfaces (incl. Pinterest unless a native route exists) | Public copy is enough |
-| Vision model | Images/screenshots as evidence | The task is text-only |
+| Vision model | Images/screenshots/video frames as evidence | The task is text-only |
 
 Escalate only as far as the question requires. Do not walk the whole ladder.
 
@@ -136,9 +150,10 @@ Load an integration reference **only if that capability is actually useful**:
 | [references/integrations/reddit.md](references/integrations/reddit.md) | Lived experience, language, objections — not population proof |
 | [references/integrations/x.md](references/integrations/x.md) | Current discourse, announcements, operator commentary |
 | [references/integrations/pinterest.md](references/integrations/pinterest.md) | Visual discovery (browser-first unless doctor shows a native route) |
+| [references/integrations/tiktok.md](references/integrations/tiktok.md) | Short-form native research (PyTok if doctor is green; replaceable) |
 | [references/integrations/vision-models.md](references/integrations/vision-models.md) | Interpreting images/screenshots |
 
-Do not treat Reddit, X, or Pinterest as scientific proof. Do not use Firecrawl Cloud. Do not dump cookies, tokens, or session secrets into context or output.
+Do not treat Reddit, X, Pinterest, or TikTok as scientific proof. Do not use Firecrawl Cloud. Do not dump cookies, tokens, or session secrets into context or output.
 
 Official Firecrawl CLI skills teach **commands**. This skill decides **whether, why, and how much**.
 
@@ -156,8 +171,8 @@ When scale helps (dozens–hundreds of pages, comments, pins, papers), write bul
 
 ## Failures
 
-Broad coverage is the goal; universal access is not. Report CAPTCHAs, paywalls, dead channels, local Firecrawl gaps, and missing auth. Do not fabricate sources or silently substitute Cloud Firecrawl.
+Broad coverage is the goal; universal access is not. Report CAPTCHAs, paywalls, dead channels, local Firecrawl gaps, missing auth, and unavailable TikTok/PyTok. Do not fabricate sources or silently substitute Cloud Firecrawl. A PyTok failure does not stop the rest of the kit.
 
 ## Safety
 
-Never print raw cookies or auth tokens. Never copy session state into this repo. Never paste credentials into Firecrawl. Prefer Agent Reach / OpenCLI / approved browser tools for login-gated sites. Leave `~/.agent-reach/` and browser profiles untouched.
+Never print raw cookies or auth tokens. Never copy session state into this repo. Never paste credentials into Firecrawl. Prefer Agent Reach / OpenCLI / approved browser tools for login-gated sites. Leave `~/.agent-reach/`, `~/.pytok/`, and browser profiles untouched. Never ask the user to paste TikTok passwords into prompts.

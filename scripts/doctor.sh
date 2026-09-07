@@ -56,6 +56,19 @@ x_state="miss"
 reddit_state="miss"
 pinterest_state="deg"
 browser_state="miss"
+tiktok_installed="miss"
+tiktok_runtime="miss"
+tiktok_browser="miss"
+tiktok_session="miss"
+tiktok_search="miss"
+tiktok_users="miss"
+tiktok_videos="miss"
+tiktok_hashtags="miss"
+tiktok_sounds="miss"
+tiktok_trending="miss"
+tiktok_comments="miss"
+tiktok_captcha="miss"
+tiktok_usable="0"
 
 echo "Universal Research"
 echo "─────────────────────────────────────────"
@@ -278,6 +291,17 @@ else
 fi
 
 echo
+echo "TikTok"
+tiktok_shell="$(python3 "$ROOT/scripts/probe_tiktok.py" --shell 2>/dev/null || true)"
+if [[ -n "$tiktok_shell" ]]; then
+  eval "$tiktok_shell"
+  python3 "$ROOT/scripts/probe_tiktok.py" --doctor || true
+else
+  miss "PyTok installed (probe failed)"
+  echo "    hint: TikTok is optional; Universal Research continues without it"
+fi
+
+echo
 echo "Authenticated Browser"
 if ur_have opencli; then
   ok "reusable browser sessions available (opencli)"
@@ -295,14 +319,14 @@ if [[ "$scrape_ok" -eq 1 || "$server_ok" -eq 1 ]]; then
 else
   fail "web extraction"
 fi
-if [[ "$x_state" == "ok" || "$reddit_state" == "ok" ]]; then
+if [[ "$x_state" == "ok" || "$reddit_state" == "ok" || "$tiktok_usable" == "1" ]]; then
   ok "social/platform research"
-elif [[ "$ar_installed" -eq 1 ]]; then
-  deg "social/platform research (Agent Reach present; routes not green)"
+elif [[ "$ar_installed" -eq 1 || "$tiktok_installed" == "ok" ]]; then
+  deg "social/platform research (platform tools present; routes not fully green)"
 else
-  miss "social/platform research (Agent Reach not installed)"
+  miss "social/platform research (Agent Reach not installed; TikTok unavailable)"
 fi
-if [[ "$browser_state" == "ok" || "$x_state" == "ok" || "$reddit_state" == "ok" ]]; then
+if [[ "$browser_state" == "ok" || "$x_state" == "ok" || "$reddit_state" == "ok" || "$tiktok_session" == "ok" ]]; then
   ok "authenticated-session research"
 else
   deg "authenticated-session research"
@@ -316,4 +340,9 @@ if [[ "$server_ok" -eq 0 ]]; then
 fi
 if [[ "$ar_installed" -eq 0 ]]; then
   echo "Agent Reach missing: degraded kit. Official install: https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md"
+fi
+if [[ "$tiktok_installed" != "ok" ]]; then
+  echo "TikTok/PyTok unavailable: optional. Universal Research continues. Installer uses GitHub MEOMcGill/pytok, not PyPI."
+elif [[ "$tiktok_session" != "ok" ]]; then
+  echo "TikTok installed but no local session. Optional login: $ROOT/scripts/setup-tiktok.sh"
 fi

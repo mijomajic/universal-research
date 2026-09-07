@@ -18,9 +18,9 @@ Reference corpora, visual taxonomy, composition, subject, camera angle, lighting
 
 ## Sources
 
-Pinterest and image search for discovery; original landing pages and publisher sites for provenance. Firecrawl `scrape --format images` or similar **only if doctor verified it**. Household v2.11.0: **screenshots were unsupported** by the engine in probe; do not plan around screenshots unless doctor flips that bit.
+Pinterest and image search for discovery; TikTok when the visual question is short-form native ([../integrations/tiktok.md](../integrations/tiktok.md)); original landing pages and publisher sites for provenance. Firecrawl `scrape --format images` or similar **only if doctor verified it**. Household v2.11.0: **screenshots were unsupported** by the engine in probe; do not plan around screenshots unless doctor flips that bit.
 
-Agent Reach has **no native Pinterest channel** as of the 2026-09 docs pass. Browser session → collect → optional Firecrawl on original URLs → vision.
+Agent Reach has **no native Pinterest channel** as of the 2026-09 docs pass. Browser session → collect → optional Firecrawl on original URLs → vision. TikTok video/frame evidence still needs vision after acquisition; captions are not the image.
 
 ## Output
 

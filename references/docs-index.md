@@ -54,6 +54,22 @@ Cookies/tokens live in `~/.agent-reach/` (typically `config.yaml`, mode 600). Do
 
 Pinterest is **not** in the current Agent Reach channel list. Treat it as browser-first until `agent-reach doctor --json` shows a Pinterest backend.
 
+## TikTok / PyTok
+
+Preferred **optional** backend for short-form native acquisition. Replaceable; not part of the core methodology.
+
+- Canonical repo: https://github.com/MEOMcGill/pytok  
+  (`https://github.com/networkdynamics/pytok` redirects here)
+- README / install: https://github.com/MEOMcGill/pytok/blob/master/README.md
+- Recommended install (upstream): `pip install git+https://github.com/MEOMcGill/pytok.git@master`  
+  **Do not** `pip install pytok` from PyPI — that name is a different project.
+- Examples: https://github.com/MEOMcGill/pytok/tree/master/examples
+- Issues: https://github.com/MEOMcGill/pytok/issues
+
+Household install puts the package in `~/.universal-research/pytok-venv` when missing. Session state is **local**: `~/.pytok` (or `$PYTOK_HOME`) — accounts SQLite, cookie backups, Chrome profiles. Never commit it. Never print cookies. Interactive login: `scripts/setup-tiktok.sh`.
+
+Trust `scripts/doctor.sh` / `scripts/probe_tiktok.py` for what this Mac can do. Upstream documents authenticated-pool use; anonymous TikTok responses are often empty. CAPTCHA solving is unreliable. **Trending** is a stub in current PyTok (`NotImplementedError`) — do not advertise it.
+
 ## When docs disagree with doctor
 
 Trust **runtime doctor output** for what this machine can do. Trust upstream docs for how to invoke a tool that doctor says is up. When a platform route changes, prefer current Agent Reach / Firecrawl docs over frozen command snippets in this skill.

@@ -52,6 +52,8 @@ Needs session/cookies: X/Twitter, Reddit (no anonymous path), Facebook, Instagra
 
 **Pinterest is not a documented channel.** Do not assume a native route. Use [pinterest.md](pinterest.md). If a future doctor JSON shows Pinterest, use it.
 
+**TikTok is not an Agent Reach channel.** Use [tiktok.md](tiktok.md) (PyTok when doctor is green). Do not wait for Agent Reach to grow a TikTok backend.
+
 ## X and Reddit
 
 When doctor shows a working route:

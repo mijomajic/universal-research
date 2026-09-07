@@ -7,6 +7,7 @@ UR_FIRECRAWL_API_URL_CANON="http://192.168.1.80:3002"
 WITH_AGENT_REACH=0
 SKIP_FC_SKILLS=0
 SKIP_PROBE=0
+SKIP_PYTOK=0
 YES=0
 FROM_TREE=""
 
@@ -19,6 +20,7 @@ Usage: install.sh [options]
                          UR_AGENT_REACH_SYSTEM=1)
   --skip-firecrawl-skills
   --skip-probe
+  --skip-pytok           Do not install PyTok (TikTok stays unavailable)
   --from-tree DIR        Install from an already unpacked checkout
 
 Canonical skill: ~/.agents/skills/universal-research
@@ -30,6 +32,8 @@ Environment:
   UR_INSTALL_AGENT_REACH=1
   UR_AGENT_REACH_SYSTEM=1   Pass --system to agent-reach install (explicit)
   UR_INSTALL_FIRECRAWL=1    Allow npm install -g firecrawl-cli
+  UR_SKIP_PYTOK=1           Skip optional PyTok install
+  PYTOK_HOME                Local TikTok session dir (default ~/.pytok; never commit)
 EOF
 }
 
@@ -39,6 +43,7 @@ while [[ $# -gt 0 ]]; do
     --with-agent-reach) WITH_AGENT_REACH=1 ;;
     --skip-firecrawl-skills) SKIP_FC_SKILLS=1 ;;
     --skip-probe) SKIP_PROBE=1 ;;
+    --skip-pytok) SKIP_PYTOK=1 ;;
     --from-tree) FROM_TREE="$2"; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "unknown option: $1" >&2; usage; exit 2 ;;
@@ -48,6 +53,9 @@ done
 
 if [[ "${UR_INSTALL_AGENT_REACH:-}" == "1" ]]; then
   WITH_AGENT_REACH=1
+fi
+if [[ "${UR_SKIP_PYTOK:-}" == "1" ]]; then
+  SKIP_PYTOK=1
 fi
 
 echo "==> preflight"
@@ -213,6 +221,47 @@ elif [[ "$WITH_AGENT_REACH" -eq 1 ]]; then
   agent-reach doctor || true
 else
   echo "not installed (pass --with-agent-reach to install). Kit is degraded without it."
+fi
+
+echo "==> TikTok / PyTok"
+install_pytok() {
+  if ur_pytok_import_ok; then
+    echo "present; leaving $(ur_pytok_home) untouched"
+    return 0
+  fi
+  local base venv spec
+  if ! base="$(ur_pick_cpython)"; then
+    echo "warning: no Python >= 3.10; TikTok research unavailable" >&2
+    return 1
+  fi
+  venv="$(ur_pytok_venv)"
+  spec="git+${UR_PYTOK_GIT}@${UR_PYTOK_GIT_REF}"
+  echo "installing PyTok from GitHub (not PyPI) → $venv"
+  echo "  https://github.com/MEOMcGill/pytok  ($spec)"
+  mkdir -p "$(dirname "$venv")"
+  if [[ ! -x "$venv/bin/python" ]]; then
+    if ! "$base" -m venv "$venv"; then
+      echo "warning: could not create PyTok venv; TikTok unavailable" >&2
+      return 1
+    fi
+  fi
+  "$venv/bin/pip" install --upgrade pip >/dev/null 2>&1 || true
+  if ! "$venv/bin/pip" install "$spec"; then
+    echo "warning: PyTok install failed; TikTok marked unavailable. Universal Research is still installed." >&2
+    return 1
+  fi
+  if ur_pytok_import_ok; then
+    echo "PyTok ready via $venv/bin/python"
+    echo "Login is local and optional: $SKILL_DST/scripts/setup-tiktok.sh"
+    return 0
+  fi
+  echo "warning: PyTok still not importable after install; TikTok unavailable" >&2
+  return 1
+}
+if [[ "$SKIP_PYTOK" -eq 1 ]]; then
+  echo "skipped (--skip-pytok / UR_SKIP_PYTOK=1). TikTok research unavailable."
+elif ! install_pytok; then
+  echo "TikTok capability degraded; continuing."
 fi
 
 echo "==> Universal Research doctor"
